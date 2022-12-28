@@ -1,28 +1,28 @@
 package quicktag
 
 import (
-	. "reflect"
-	. "unsafe"
+	"reflect"
+	"unsafe"
 )
 
 type emptyInterface struct {
-	pt Pointer
-	pv Pointer
+	pt unsafe.Pointer
+	pv unsafe.Pointer
 }
 
-func PointerOfType(t Type) Pointer {
-	p := *(*emptyInterface)(Pointer(&t))
+func PointerOfType(t reflect.Type) unsafe.Pointer {
+	p := *(*emptyInterface)(unsafe.Pointer(&t))
 	return p.pv
 }
 
-func TypeCast(src interface{}, dstType Type) (dst interface{}) {
-	srcType := TypeOf(src)
-	eface := *(*emptyInterface)(Pointer(&src))
-	if srcType.Kind() == Ptr {
-		eface.pt = PointerOfType(PtrTo(dstType))
+func TypeCast(src interface{}, dstType reflect.Type) (dst interface{}) {
+	srcType := reflect.TypeOf(src)
+	eface := *(*emptyInterface)(unsafe.Pointer(&src))
+	if srcType.Kind() == reflect.Ptr {
+		eface.pt = PointerOfType(reflect.PtrTo(dstType))
 	} else {
 		eface.pt = PointerOfType(dstType)
 	}
-	dst = *(*interface{})(Pointer(&eface))
+	dst = *(*interface{})(unsafe.Pointer(&eface))
 	return
 }

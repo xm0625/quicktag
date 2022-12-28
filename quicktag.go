@@ -66,7 +66,7 @@ func PascalToUnderline(s string) string {
 
 func DynamicType(t Type) Type {
 	if t.Kind() != Struct {
-		panic("must struct type")
+		panic(any("must struct type"))
 	}
 	nt := dynTypeMap[t]
 	if nt == nil {
@@ -97,7 +97,7 @@ func genType(t Type, r *genRecords) Type {
 		break
 	case Map:
 		if t.Key().Kind() != String {
-			panic("map key must be string")
+			panic(any("map key must be string"))
 		}
 		gt := genType(t.Elem(), r)
 		if gt == nil {
